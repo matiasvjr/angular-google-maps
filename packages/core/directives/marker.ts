@@ -99,6 +99,11 @@ export class AgmMarker implements OnDestroy, OnChanges, AfterContentInit {
   @Input('markerClickable') clickable: boolean = true;
 
   /**
+   * If true, the marker is animated when changing position
+   */
+  @Input() animated: boolean = false;
+
+  /**
    * This event emitter gets emitted when the user clicks on the marker.
    */
   @Output() markerClick: EventEmitter<void> = new EventEmitter<void>();

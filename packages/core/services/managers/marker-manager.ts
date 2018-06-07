@@ -30,7 +30,28 @@ export class MarkerManager {
 
   updateMarkerPosition(marker: AgmMarker): Promise<void> {
     return this._markers.get(marker).then(
-        (m: Marker) => m.setPosition({lat: marker.latitude, lng: marker.longitude}));
+        (m: Marker) => {
+          if (marker.animated) {
+            let initialLat = m.getPosition().lat();
+            let initialLng = m.getPosition().lng();
+            let finalLat = marker.latitude;
+            let finalLng = marker.longitude;
+            let steps = 100;
+            let deltaLat = (finalLat - initialLat) / steps;
+            let deltaLng = (finalLng - initialLng) / steps;
+            for (let i = 0; i < steps; i++) {
+                setTimeout(() => {
+                    let currentPosition = m.getPosition();
+                    let nextLat = currentPosition.lat() + deltaLat;
+                    let nextLng = currentPosition.lng() + deltaLng;
+                    m.setPosition({ lat: nextLat, lng: nextLng });
+                }, 10 * i);
+            }
+            return undefined;
+          } else {
+            return m.setPosition({lat: marker.latitude, lng: marker.longitude});
+          }
+        });
   }
 
   updateTitle(marker: AgmMarker): Promise<void> {
