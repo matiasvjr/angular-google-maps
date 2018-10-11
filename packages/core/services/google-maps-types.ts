@@ -36,6 +36,7 @@ export interface Marker extends MVCObject {
   setAnimation(animation: any): void;
   getLabel(): MarkerLabel;
   setClickable(clickable: boolean): void;
+  getPosition(): LatLng;
 }
 
 export interface MarkerOptions {
