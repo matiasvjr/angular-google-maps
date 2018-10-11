@@ -108,7 +108,7 @@ export class AgmMarker implements OnDestroy, OnChanges, AfterContentInit {
    * If true, the marker is animated when changing position
    */
   @Input() animated: boolean = false;
-  
+
   /**
    * Which animation to play when marker is added to a map.
    * This can be 'BOUNCE' or 'DROP'
