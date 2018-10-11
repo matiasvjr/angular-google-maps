@@ -9,6 +9,7 @@ export interface GoogleMap extends MVCObject {
   getCenter(): LatLng;
   setCenter(latLng: LatLng|LatLngLiteral): void;
   getBounds(): LatLngBounds;
+  getMapTypeId(): MapTypeId;
   getZoom(): number;
   setOptions(options: MapOptions): void;
   panToBounds(latLngBounds: LatLngBounds|LatLngBoundsLiteral): void;
@@ -32,6 +33,7 @@ export interface Marker extends MVCObject {
   setOpacity(opacity: number): void;
   setVisible(visible: boolean): void;
   setZIndex(zIndex: number): void;
+  setAnimation(animation: any): void;
   getLabel(): MarkerLabel;
   setClickable(clickable: boolean): void;
   getPosition(): LatLng;
@@ -48,6 +50,7 @@ export interface MarkerOptions {
   visible?: boolean;
   zIndex?: number;
   clickable: boolean;
+  animation?: any;
 }
 
 export interface MarkerLabel {
@@ -249,7 +252,7 @@ export interface PolylineOptions {
   draggable?: boolean;
   editable?: boolean;
   geodesic?: boolean;
-  icon?: Array<IconSequence>;
+  icons?: Array<IconSequence>;
   map?: GoogleMap;
   path?: Array<LatLng>|Array<LatLng|LatLngLiteral>;
   strokeColor?: string;
@@ -402,7 +405,7 @@ export interface Feature extends MVCObject {
   properties: any;
 }
 
-export interface DataOptions{
+export interface DataOptions {
   controlPosition?: ControlPosition;
   controls?: string[];
   drawingMode?: string;

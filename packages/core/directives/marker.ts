@@ -1,13 +1,14 @@
 import {Directive, EventEmitter, OnChanges, OnDestroy, SimpleChange,
   AfterContentInit, ContentChildren, QueryList, Input, Output
 } from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 
 import {MouseEvent} from '../map-types';
 import * as mapTypes from '../services/google-maps-types';
 import {MarkerManager} from '../services/managers/marker-manager';
 
 import {AgmInfoWindow} from './info-window';
+import {MarkerLabel} from '../map-types';
 
 let markerId = 0;
 
@@ -35,7 +36,12 @@ let markerId = 0;
  * ```
  */
 @Directive({
-  selector: 'agm-marker'
+  selector: 'agm-marker',
+  inputs: [
+    'latitude', 'longitude', 'title', 'label', 'draggable: markerDraggable', 'iconUrl',
+    'openInfoWindow', 'opacity', 'visible', 'zIndex', 'animation'
+  ],
+  outputs: ['markerClick', 'dragEnd', 'mouseOver', 'mouseOut']
 })
 export class AgmMarker implements OnDestroy, OnChanges, AfterContentInit {
   /**
@@ -56,7 +62,7 @@ export class AgmMarker implements OnDestroy, OnChanges, AfterContentInit {
   /**
    * The label (a single uppercase character) for the marker.
    */
-  @Input() label: string;
+  @Input() label: string | MarkerLabel;
 
   /**
    * If true, the marker can be dragged. Default value is false.
@@ -102,6 +108,12 @@ export class AgmMarker implements OnDestroy, OnChanges, AfterContentInit {
    * If true, the marker is animated when changing position
    */
   @Input() animated: boolean = false;
+  
+  /**
+   * Which animation to play when marker is added to a map.
+   * This can be 'BOUNCE' or 'DROP'
+   */
+  animation: 'BOUNCE' | 'DROP' | null;
 
   /**
    * This event emitter gets emitted when the user clicks on the marker.
@@ -186,6 +198,9 @@ export class AgmMarker implements OnDestroy, OnChanges, AfterContentInit {
     }
     if (changes['clickable']) {
       this._markerManager.updateClickable(this);
+    }
+    if (changes['animation']) {
+      this._markerManager.updateAnimation(this);
     }
   }
 
