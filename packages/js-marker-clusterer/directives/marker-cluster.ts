@@ -1,7 +1,7 @@
 import {Directive, Input, OnDestroy, OnChanges, OnInit, SimpleChange} from '@angular/core';
 
 import {ClusterManager} from '../services/managers/cluster-manager';
-import {MarkerManager, InfoWindowManager} from '@agm/core';
+import {MarkerManager, InfoWindowManager} from 'agm-2mundos-core';
 
 import {ClusterOptions, ClusterStyle} from '../services/google-clusterer-types';
 
