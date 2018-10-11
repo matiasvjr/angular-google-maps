@@ -21,7 +21,8 @@
             "jest"
         ],
         "paths": {
-            "@agm/*": ["./packages/*"]
+            "@agm/*": ["./packages/*"],
+            "agm-2mundos-core": ["./packages/core"]
         }
     },
     "angularCompilerOptions": {

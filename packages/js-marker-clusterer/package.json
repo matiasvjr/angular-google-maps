@@ -1,6 +1,6 @@
 {
   "name": "@agm/clusterer-src",
   "dependencies": {
-    "@agm/core": "file:../core"
+    "agm-2mundos-core": "file:../core"
   }
 }
