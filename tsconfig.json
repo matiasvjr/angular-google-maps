@@ -18,7 +18,8 @@
             "esnext"
         ],
         "types": [
-            "jest"
+            "jest",
+            "gsap"
         ],
         "paths": {
             "@agm/*": ["./packages/*"],
