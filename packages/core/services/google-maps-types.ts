@@ -1,3 +1,5 @@
+import { TweenMax } from 'gsap';
+
 export var google: any;
 
 export interface GoogleMap extends MVCObject {
@@ -23,6 +25,7 @@ export interface LatLng {
 }
 
 export interface Marker extends MVCObject {
+  tween: TweenMax;
   constructor(options?: MarkerOptions): void;
   setMap(map: GoogleMap): void;
   setPosition(latLng: LatLng|LatLngLiteral): void;

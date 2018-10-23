@@ -34,16 +34,31 @@ export class MarkerManager {
   updateMarkerPosition(marker: AgmMarker): Promise<void> {
     return this._markers.get(marker).then(
         (m: Marker) => {
-          if (marker.animated) {
+          let shouldAnimate = false;
+
+          if (Math.abs(marker.latitude - m.getPosition().lat()) > marker.minCoordAnimationThreshold ||
+              Math.abs(marker.longitude - m.getPosition().lng()) > marker.minCoordAnimationThreshold) {
+              shouldAnimate = true;
+          }
+
+          if (marker.animated && shouldAnimate) {
             var obj = { lat: m.getPosition().lat(), lng: m.getPosition().lng() };
-            TweenMax.to(obj, 1, {
+
+            TweenMax.ticker.fps(30);
+
+            if (m.tween) {
+                m.tween.kill();
+            }
+            m.tween = TweenMax.to(obj, 1, {
                 lat: marker.latitude,
                 lng: marker.longitude,
                 onUpdate: function() {
                     m.setPosition({ lat: obj.lat, lng: obj.lng });
                 },
-                ease: Power2.easeInOut
+                ease: marker.animationCurve,
+                force3D: false
             });
+
             return undefined;
           } else {
             return m.setPosition({lat: marker.latitude, lng: marker.longitude});
