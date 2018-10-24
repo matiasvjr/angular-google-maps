@@ -6,6 +6,8 @@ import {AgmMarker} from './../../directives/marker';
 import {GoogleMapsAPIWrapper} from './../google-maps-api-wrapper';
 import {Marker} from './../google-maps-types';
 
+import {TweenMax, Power2} from 'gsap';
+
 declare var google: any;
 
 @Injectable()
@@ -32,22 +34,31 @@ export class MarkerManager {
   updateMarkerPosition(marker: AgmMarker): Promise<void> {
     return this._markers.get(marker).then(
         (m: Marker) => {
-          if (marker.animated) {
-            let initialLat = m.getPosition().lat();
-            let initialLng = m.getPosition().lng();
-            let finalLat = marker.latitude;
-            let finalLng = marker.longitude;
-            let steps = 100;
-            let deltaLat = (finalLat - initialLat) / steps;
-            let deltaLng = (finalLng - initialLng) / steps;
-            for (let i = 0; i < steps; i++) {
-                setTimeout(() => {
-                    let currentPosition = m.getPosition();
-                    let nextLat = currentPosition.lat() + deltaLat;
-                    let nextLng = currentPosition.lng() + deltaLng;
-                    m.setPosition({ lat: nextLat, lng: nextLng });
-                }, 10 * i);
+          let shouldAnimate = false;
+
+          if (Math.abs(marker.latitude - m.getPosition().lat()) > marker.minCoordAnimationThreshold ||
+              Math.abs(marker.longitude - m.getPosition().lng()) > marker.minCoordAnimationThreshold) {
+              shouldAnimate = true;
+          }
+
+          if (marker.animated && shouldAnimate) {
+            var obj = { lat: m.getPosition().lat(), lng: m.getPosition().lng() };
+
+            TweenMax.ticker.fps(30);
+
+            if (m.tween) {
+                m.tween.kill();
             }
+            m.tween = TweenMax.to(obj, 1, {
+                lat: marker.latitude,
+                lng: marker.longitude,
+                onUpdate: function() {
+                    m.setPosition({ lat: obj.lat, lng: obj.lng });
+                },
+                ease: marker.animationCurve,
+                force3D: false
+            });
+
             return undefined;
           } else {
             return m.setPosition({lat: marker.latitude, lng: marker.longitude});

@@ -9,6 +9,7 @@ import {MarkerManager} from '../services/managers/marker-manager';
 
 import {AgmInfoWindow} from './info-window';
 import {MarkerLabel} from '../map-types';
+import { Ease, Linear } from 'gsap';
 
 let markerId = 0;
 
@@ -39,7 +40,8 @@ let markerId = 0;
   selector: 'agm-marker',
   inputs: [
     'latitude', 'longitude', 'title', 'label', 'draggable: markerDraggable', 'iconUrl',
-    'openInfoWindow', 'opacity', 'visible', 'zIndex', 'animation'
+    'openInfoWindow', 'opacity', 'visible', 'zIndex', 'animation', 'animated', 'animationCurve',
+    'minCoordAnimationThreshold'
   ],
   outputs: ['markerClick', 'dragEnd', 'mouseOver', 'mouseOut']
 })
@@ -105,9 +107,19 @@ export class AgmMarker implements OnDestroy, OnChanges, AfterContentInit {
   @Input('markerClickable') clickable: boolean = true;
 
   /**
-   * If true, the marker is animated when changing position
+   * If true, the marker is animated when changing position.
    */
   @Input() animated: boolean = false;
+
+  /**
+   * The minimum variation in coordinate value necessary to trigger the animation.
+   */
+  @Input() minCoordAnimationThreshold: number = 0.00002;
+
+  /**
+   * Which animation curve to use when marker is changing position.
+   */
+  @Input() animationCurve: Ease = Linear.easeNone;
 
   /**
    * Which animation to play when marker is added to a map.
