@@ -24,5 +24,8 @@
     "agm-2mundos-core": "^1.0.0-beta.3-2m.0.0",
     "js-2mundos-marker-clusterer": "^1.0.0-2m"
   },
-  "homepage": "https://github.com/SebastianM/angular-google-maps#readme"
+  "homepage": "https://github.com/SebastianM/angular-google-maps#readme",
+  "main": "js-marker-clusterer.umd.js",
+  "es2015": "index.js",
+  "typings": "index.d.ts"
 }
